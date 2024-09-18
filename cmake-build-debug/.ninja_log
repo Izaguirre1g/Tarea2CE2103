@@ -1,0 +1,86 @@
+# ninja log v6
+3	11	1726613390513403132	/home/iquick/Documents/Proyectos C/Tarea2/cmake-build-debug/Tarea2_autogen/mocs_compilation.cpp	768ae343f73398a1
+11	3574	1726613363312267963	CMakeFiles/Tarea2.dir/MergeSort.cpp.o	23482978ac9671ff
+12	3644	1726613390522403175	CMakeFiles/Tarea2.dir/SelectionSort.cpp.o	5a18830fab7212f8
+3	11	1726613390513403132	Tarea2_autogen/mocs_compilation.cpp	768ae343f73398a1
+3	11	1726613390513403132	Tarea2_autogen/timestamp	768ae343f73398a1
+13	1264	1726595060039930434	CMakeFiles/Tarea2.dir/Timer.cpp.o	e2b79743580cd3f7
+13	5814	1726595060039930434	CMakeFiles/Tarea2.dir/Tarea2_autogen/mocs_compilation.cpp.o	565a33e1c8340ce7
+14	9795	1726595060040930375	CMakeFiles/Tarea2.dir/home/iquick/Documents/Proyectos_C/QCustomPlot/qcustomplot/qcustomplot.cpp.o	fa19b6b43da7a839
+12	3488	1726598639770664728	CMakeFiles/Tarea2.dir/main.cpp.o	cbcd489c01dcc3ef
+12	3553	1726612963088122141	CMakeFiles/Tarea2.dir/BinarySearch.cpp.o	9b4b4a1ac2b0bab2
+12	3595	1726611601236177228	CMakeFiles/Tarea2.dir/SortedLinkedList.cpp.o	8ade58d3f6907547
+13	4633	1726595060039930434	CMakeFiles/Tarea2.dir/Benchmarks.cpp.o	8cebef5bfee5c3c8
+3	11	1726613390513403132	/home/iquick/Documents/Proyectos C/Tarea2/cmake-build-debug/Tarea2_autogen/timestamp	768ae343f73398a1
+3644	3958	1726613394154420758	Tarea2	85966b8d5dc31fa9
+12	3630	1726613272966094895	CMakeFiles/Tarea2.dir/BubbleSort.cpp.o	cfcc5c83a554bb18
+1	237	1726614100739482802	BinarySearch_autogen/timestamp	8f1234d2b4a6f393
+1	237	1726614100739482802	BinarySearch_autogen/mocs_compilation.cpp	8f1234d2b4a6f393
+1	237	1726614100739482802	/home/iquick/Documents/Proyectos C/Tarea2/cmake-build-debug/BinarySearch_autogen/timestamp	8f1234d2b4a6f393
+1	237	1726614100739482802	/home/iquick/Documents/Proyectos C/Tarea2/cmake-build-debug/BinarySearch_autogen/mocs_compilation.cpp	8f1234d2b4a6f393
+240	4012	1726614100746482814	CMakeFiles/BinarySearch.dir/BinarySearch.cpp.o	3a112b1168a44668
+240	4922	1726614100746482814	CMakeFiles/BinarySearch.dir/BinarySearch_autogen/mocs_compilation.cpp.o	4d5733cc6c7cf9c2
+240	8953	1726614100746482814	CMakeFiles/BinarySearch.dir/home/iquick/Documents/Proyectos_C/QCustomPlot/qcustomplot/qcustomplot.cpp.o	c152c0d6f6e74898
+8953	9264	1726614109459497609	BinarySearch	6a61ff08f4062752
+1	235	1726614205043650461	BubbleSort_autogen/timestamp	4785ba4f0b44c6bb
+1	235	1726614205043650461	BubbleSort_autogen/mocs_compilation.cpp	4785ba4f0b44c6bb
+1	235	1726614205043650461	/home/iquick/Documents/Proyectos C/Tarea2/cmake-build-debug/BubbleSort_autogen/timestamp	4785ba4f0b44c6bb
+1	235	1726614205043650461	/home/iquick/Documents/Proyectos C/Tarea2/cmake-build-debug/BubbleSort_autogen/mocs_compilation.cpp	4785ba4f0b44c6bb
+236	4901	1726614205047650468	CMakeFiles/BubbleSort.dir/BubbleSort.cpp.o	9b8f668e9ada8191
+236	6355	1726614205047650468	CMakeFiles/BubbleSort.dir/BubbleSort_autogen/mocs_compilation.cpp.o	472c9c87bb5747c8
+236	9795	1726614205047650468	CMakeFiles/BubbleSort.dir/home/iquick/Documents/Proyectos_C/QCustomPlot/qcustomplot/qcustomplot.cpp.o	81e65e1bf642ce87
+9795	10121	1726614214606664863	BubbleSort	4056b94f35c01b0a
+1	251	1726614273437750277	MergeSort_autogen/timestamp	c58bb1797c5388f9
+1	251	1726614273437750277	MergeSort_autogen/mocs_compilation.cpp	c58bb1797c5388f9
+1	251	1726614273437750277	/home/iquick/Documents/Proyectos C/Tarea2/cmake-build-debug/MergeSort_autogen/timestamp	c58bb1797c5388f9
+1	251	1726614273437750277	/home/iquick/Documents/Proyectos C/Tarea2/cmake-build-debug/MergeSort_autogen/mocs_compilation.cpp	c58bb1797c5388f9
+252	4233	1726614273441750282	CMakeFiles/MergeSort.dir/MergeSort.cpp.o	6a05ab8a0cd175f8
+252	5288	1726614273441750282	CMakeFiles/MergeSort.dir/MergeSort_autogen/mocs_compilation.cpp.o	e7da2718a0478e5b
+252	9360	1726614273441750282	CMakeFiles/MergeSort.dir/home/iquick/Documents/Proyectos_C/QCustomPlot/qcustomplot/qcustomplot.cpp.o	edf51a34616c6a8a
+9360	9689	1726614282549763038	MergeSort	bc2efe5eb89d4ee0
+1	239	1726614315532808274	SelectionSort_autogen/timestamp	f5df26940a2f5471
+1	239	1726614315532808274	SelectionSort_autogen/mocs_compilation.cpp	f5df26940a2f5471
+1	239	1726614315532808274	/home/iquick/Documents/Proyectos C/Tarea2/cmake-build-debug/SelectionSort_autogen/timestamp	f5df26940a2f5471
+1	239	1726614315532808274	/home/iquick/Documents/Proyectos C/Tarea2/cmake-build-debug/SelectionSort_autogen/mocs_compilation.cpp	f5df26940a2f5471
+239	4341	1726614315536808279	CMakeFiles/SelectionSort.dir/SelectionSort.cpp.o	e576a7d5db5ad4af
+239	5202	1726614315536808279	CMakeFiles/SelectionSort.dir/SelectionSort_autogen/mocs_compilation.cpp.o	3842e8f02ef29db1
+239	9347	1726614315536808279	CMakeFiles/SelectionSort.dir/home/iquick/Documents/Proyectos_C/QCustomPlot/qcustomplot/qcustomplot.cpp.o	db8316cb29d005d9
+9347	9670	1726614324644820502	SelectionSort	581d8d2c07583fef
+1	244	1726614357501863724	SortedLinkedList_autogen/timestamp	4c997482fc322e40
+1	244	1726614357501863724	SortedLinkedList_autogen/mocs_compilation.cpp	4c997482fc322e40
+1	244	1726614357501863724	/home/iquick/Documents/Proyectos C/Tarea2/cmake-build-debug/SortedLinkedList_autogen/timestamp	4c997482fc322e40
+1	244	1726614357501863724	/home/iquick/Documents/Proyectos C/Tarea2/cmake-build-debug/SortedLinkedList_autogen/mocs_compilation.cpp	4c997482fc322e40
+245	4724	1726614357505863729	CMakeFiles/SortedLinkedList.dir/SortedLinkedList.cpp.o	fd2558f4a80697a2
+245	5589	1726614357505863729	CMakeFiles/SortedLinkedList.dir/SortedLinkedList_autogen/mocs_compilation.cpp.o	e9c0879ac2c9ab59
+245	9737	1726614357505863729	CMakeFiles/SortedLinkedList.dir/home/iquick/Documents/Proyectos_C/QCustomPlot/qcustomplot/qcustomplot.cpp.o	8ccd9caee1d87c22
+9737	10061	1726614366997875955	SortedLinkedList	5688bb02299eff07
+4	12	1726614446693974490	BubbleSort_autogen/timestamp	4785ba4f0b44c6bb
+4	12	1726614446693974490	BubbleSort_autogen/mocs_compilation.cpp	4785ba4f0b44c6bb
+4	12	1726614446693974490	/home/iquick/Documents/Proyectos C/Tarea2/cmake-build-debug/BubbleSort_autogen/timestamp	4785ba4f0b44c6bb
+4	12	1726614446693974490	/home/iquick/Documents/Proyectos C/Tarea2/cmake-build-debug/BubbleSort_autogen/mocs_compilation.cpp	4785ba4f0b44c6bb
+12	3902	1726614446701974500	CMakeFiles/BubbleSort.dir/BubbleSort.cpp.o	9b8f668e9ada8191
+3902	4209	1726614450591979131	BubbleSort	4056b94f35c01b0a
+3	12	1726614505341042678	BubbleSort_autogen/timestamp	4785ba4f0b44c6bb
+3	12	1726614505341042678	BubbleSort_autogen/mocs_compilation.cpp	4785ba4f0b44c6bb
+3	12	1726614505341042678	/home/iquick/Documents/Proyectos C/Tarea2/cmake-build-debug/BubbleSort_autogen/timestamp	4785ba4f0b44c6bb
+3	12	1726614505341042678	/home/iquick/Documents/Proyectos C/Tarea2/cmake-build-debug/BubbleSort_autogen/mocs_compilation.cpp	4785ba4f0b44c6bb
+12	3547	1726614505350042689	CMakeFiles/BubbleSort.dir/BubbleSort.cpp.o	9b8f668e9ada8191
+3547	3856	1726614508885046695	BubbleSort	4056b94f35c01b0a
+2	12	1726614552083094738	BubbleSort_autogen/timestamp	4785ba4f0b44c6bb
+2	12	1726614552083094738	BubbleSort_autogen/mocs_compilation.cpp	4785ba4f0b44c6bb
+2	12	1726614552083094738	/home/iquick/Documents/Proyectos C/Tarea2/cmake-build-debug/BubbleSort_autogen/timestamp	4785ba4f0b44c6bb
+2	12	1726614552083094738	/home/iquick/Documents/Proyectos C/Tarea2/cmake-build-debug/BubbleSort_autogen/mocs_compilation.cpp	4785ba4f0b44c6bb
+12	3551	1726614552093094750	CMakeFiles/BubbleSort.dir/BubbleSort.cpp.o	9b8f668e9ada8191
+3551	3862	1726614555632098613	BubbleSort	4056b94f35c01b0a
+2	11	1726614592280138021	BubbleSort_autogen/timestamp	4785ba4f0b44c6bb
+2	11	1726614592280138021	BubbleSort_autogen/mocs_compilation.cpp	4785ba4f0b44c6bb
+2	11	1726614592280138021	/home/iquick/Documents/Proyectos C/Tarea2/cmake-build-debug/BubbleSort_autogen/timestamp	4785ba4f0b44c6bb
+2	11	1726614592280138021	/home/iquick/Documents/Proyectos C/Tarea2/cmake-build-debug/BubbleSort_autogen/mocs_compilation.cpp	4785ba4f0b44c6bb
+11	3537	1726614592289138031	CMakeFiles/BubbleSort.dir/BubbleSort.cpp.o	9b8f668e9ada8191
+3537	3838	1726614595815141766	BubbleSort	4056b94f35c01b0a
+3	12	1726614698280246325	BubbleSort_autogen/timestamp	4785ba4f0b44c6bb
+3	12	1726614698280246325	BubbleSort_autogen/mocs_compilation.cpp	4785ba4f0b44c6bb
+3	12	1726614698280246325	/home/iquick/Documents/Proyectos C/Tarea2/cmake-build-debug/BubbleSort_autogen/timestamp	4785ba4f0b44c6bb
+3	12	1726614698280246325	/home/iquick/Documents/Proyectos C/Tarea2/cmake-build-debug/BubbleSort_autogen/mocs_compilation.cpp	4785ba4f0b44c6bb
+12	3574	1726614698289246334	CMakeFiles/BubbleSort.dir/BubbleSort.cpp.o	9b8f668e9ada8191
+3574	3890	1726614701851249841	BubbleSort	4056b94f35c01b0a

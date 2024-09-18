@@ -1,0 +1,5 @@
+/home/iquick/Documents/Proyectos C/Tarea2/build/CMakeFiles/Tarea2.dir
+/home/iquick/Documents/Proyectos C/Tarea2/build/CMakeFiles/edit_cache.dir
+/home/iquick/Documents/Proyectos C/Tarea2/build/CMakeFiles/rebuild_cache.dir
+/home/iquick/Documents/Proyectos C/Tarea2/build/CMakeFiles/Tarea2_autogen_timestamp_deps.dir
+/home/iquick/Documents/Proyectos C/Tarea2/build/CMakeFiles/Tarea2_autogen.dir
