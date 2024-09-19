@@ -5,229 +5,196 @@
 #include <vector>
 #include <chrono>
 #include <algorithm> // Para std::shuffle
-#include <random>    // Para std::random_device y std::mt19937
-#include <cmath>     // Para funciones matemáticas
-#include <queue>     // Para std::queue
+#include <random>    // Para generador de números aleatorios
+#include <cmath>     // Para operaciones matemáticas
+#include <queue>     // Para el uso de std::queue
 
 using namespace std;
-using namespace std::chrono;
+using namespace chrono;
 
-//Medición de tiempo
-long long getSystemTimeNano() {
+// Función para obtener el tiempo actual en nanosegundos
+long long obtenerTiempoSistemaNano() {
     return duration_cast<nanoseconds>(high_resolution_clock::now().time_since_epoch()).count();
 }
 
-//Nodo del árbol de búsqueda binario (BST)
-struct TreeNode {
-    int value;
-    TreeNode* left;
-    TreeNode* right;
+// Definición de un nodo para el árbol binario de búsqueda (BST)
+struct Nodo {
+    int valor;
+    Nodo* izquierda;
+    Nodo* derecha;
 
-    TreeNode(int val) : value(val), left(nullptr), right(nullptr) {}
+    Nodo(int v) : valor(v), izquierda(nullptr), derecha(nullptr) {}
 };
 
-
-TreeNode* insert(TreeNode* root, int value) {
-    if (root == nullptr) {
-        return new TreeNode(value);
+// Inserta un nuevo valor en el árbol BST
+Nodo* insertar(Nodo* raiz, int valor) {
+    if (!raiz) {
+        return new Nodo(valor);
     }
-    if (value < root->value) {
-        root->left = insert(root->left, value);
+    if (valor < raiz->valor) {
+        raiz->izquierda = insertar(raiz->izquierda, valor);
     } else {
-        root->right = insert(root->right, value);
+        raiz->derecha = insertar(raiz->derecha, valor);
     }
-    return root;
+    return raiz;
 }
 
-// Mejor caso
-TreeNode* generateBalancedBST(int n) {
-    vector<int> values(n);
+// Genera un árbol BST balanceado
+Nodo* generarBSTBalanceado(int n) {
+    vector<int> valores(n);
     for (int i = 0; i < n; ++i) {
-        values[i] = i;
+        valores[i] = i;
     }
     random_device rd;
-    mt19937 g(rd());
-    shuffle(values.begin(), values.end(), g);
+    mt19937 generador(rd());
+    shuffle(valores.begin(), valores.end(), generador);
 
-    TreeNode* root = nullptr;
-    for (int val : values) {
-        root = insert(root, val);
+    Nodo* raiz = nullptr;
+    for (int v : valores) {
+        raiz = insertar(raiz, v);
     }
-    return root;
+    return raiz;
 }
 
-//Peor caso
-TreeNode* generateWorstCaseBST(int n) {
-    TreeNode* root = nullptr;
+// Genera un BST en el peor caso (desequilibrado)
+Nodo* generarBSTPeorCaso(int n) {
+    Nodo* raiz = nullptr;
     for (int i = 0; i < n; ++i) {
-        root = insert(root, i);
+        raiz = insertar(raiz, i);
     }
-    return root;
+    return raiz;
 }
 
-//Caso promedio
-TreeNode* generateAverageCaseBST(int n) {
-    vector<int> values(n);
+// Genera un BST en el caso promedio
+Nodo* generarBSTCasoPromedio(int n) {
+    vector<int> valores(n);
     for (int i = 0; i < n; ++i) {
-        values[i] = i;
+        valores[i] = i;
     }
     random_device rd;
-    mt19937 g(rd());
-    shuffle(values.begin(), values.end(), g);
+    mt19937 generador(rd());
+    shuffle(valores.begin(), valores.end(), generador);
 
-    TreeNode* root = nullptr;
-    for (int val : values) {
-        root = insert(root, val);
+    Nodo* raiz = nullptr;
+    for (int v : valores) {
+        raiz = insertar(raiz, v);
     }
-    return root;
+    return raiz;
 }
 
 // Mide el tiempo de inserción en el BST
-long long benchmarkInsertion(int n, TreeNode* (*generateBST)(int)) {
-    TreeNode* root = generateBST(n);
-    auto start = high_resolution_clock::now();
+long long medirTiempoInsercion(int n, Nodo* (*generarBST)(int)) {
+    Nodo* raiz = generarBST(n);
+    auto inicio = high_resolution_clock::now();
     for (int i = 0; i < n; ++i) {
-        insert(root, i);
+        insertar(raiz, i);
     }
-    auto end = high_resolution_clock::now();
-    auto duration = duration_cast<nanoseconds>(end - start).count();
-    return duration;
+    auto fin = high_resolution_clock::now();
+    return duration_cast<nanoseconds>(fin - inicio).count();
 }
 
-// Función para realizar los benchmarks y devolver los resultados
-void runBenchmarks(const vector<int>& sizes, vector<long long>& bestCaseTimes, vector<long long>& worstCaseTimes, vector<long long>& avgCaseTimes) {
-    for (int n : sizes) {
-        // Mejor caso
-        long long bestCaseTime = benchmarkInsertion(n, generateBalancedBST);
-        bestCaseTimes.push_back(bestCaseTime);
-
-        // Peor caso
-        long long worstCaseTime = benchmarkInsertion(n, generateWorstCaseBST);
-        worstCaseTimes.push_back(worstCaseTime);
-
-        // Caso promedio
-        long long avgCaseTime = benchmarkInsertion(n, generateAverageCaseBST);
-        avgCaseTimes.push_back(avgCaseTime);
+// Ejecuta los benchmarks y almacena los resultados
+void ejecutarBenchmarks(const vector<int>& tamanos, vector<long long>& tiemposMejorCaso, vector<long long>& tiemposPeorCaso, vector<long long>& tiemposPromedio) {
+    for (int n : tamanos) {
+        tiemposMejorCaso.push_back(medirTiempoInsercion(n, generarBSTBalanceado));
+        tiemposPeorCaso.push_back(medirTiempoInsercion(n, generarBSTPeorCaso));
+        tiemposPromedio.push_back(medirTiempoInsercion(n, generarBSTCasoPromedio));
     }
 }
 
-// Función para graficar los resultados del benchmark
-void plotResults(QCustomPlot* customPlot, const vector<int>& sizes, const vector<long long>& bestCaseTimes, const vector<long long>& worstCaseTimes, const vector<long long>& avgCaseTimes) {
-    QVector<double> x(sizes.size()), yBest(sizes.size()), yWorst(sizes.size()), yAvg(sizes.size());
+// Función para graficar los resultados de los benchmarks
+void graficarResultados(QCustomPlot* customPlot, const vector<int>& tamanos, const vector<long long>& tiemposMejorCaso, const vector<long long>& tiemposPeorCaso, const vector<long long>& tiemposPromedio) {
+    QVector<double> x(tamanos.size()), yMejor(tamanos.size()), yPeor(tamanos.size()), yPromedio(tamanos.size());
 
-    // Llenar los datos
-    for (size_t i = 0; i < sizes.size(); ++i) {
-        x[i] = sizes[i];
-        yBest[i] = bestCaseTimes[i];
-        yWorst[i] = worstCaseTimes[i];
-        yAvg[i] = avgCaseTimes[i];
+    // Rellenar los datos
+    for (size_t i = 0; i < tamanos.size(); ++i) {
+        x[i] = tamanos[i];
+        yMejor[i] = tiemposMejorCaso[i];
+        yPeor[i] = tiemposPeorCaso[i];
+        yPromedio[i] = tiemposPromedio[i];
     }
 
-    // Graficar mejor caso
+    // Graficar los diferentes casos
     customPlot->addGraph();
-    customPlot->graph(0)->setData(x, yBest);
+    customPlot->graph(0)->setData(x, yMejor);
     customPlot->graph(0)->setPen(QPen(Qt::blue));
-    customPlot->graph(0)->setName("Mejor Caso O(logn)");
+    customPlot->graph(0)->setName("Mejor Caso");
 
-    // Graficar peor caso
     customPlot->addGraph();
-    customPlot->graph(1)->setData(x, yWorst);
+    customPlot->graph(1)->setData(x, yPeor);
     customPlot->graph(1)->setPen(QPen(Qt::red));
-    customPlot->graph(1)->setName("Peor Caso O(n)");
+    customPlot->graph(1)->setName("Peor Caso");
 
-    // Graficar caso promedio
     customPlot->addGraph();
-    customPlot->graph(2)->setData(x, yAvg);
+    customPlot->graph(2)->setData(x, yPromedio);
     customPlot->graph(2)->setPen(QPen(Qt::green));
-    customPlot->graph(2)->setName("Caso Promedio O(logn)");
+    customPlot->graph(2)->setName("Caso Promedio");
 
-    // Ajustar etiquetas y rango de ejes
-    customPlot->xAxis->setLabel("Tamaño de entrada (n)");
-    customPlot->yAxis->setLabel("Tiempo (nanosegundos)");
+    // Etiquetas y ajustes de ejes
+    customPlot->xAxis->setLabel("Tamaño de entrada");
+    customPlot->yAxis->setLabel("Tiempo en nanosegundos");
+    customPlot->xAxis->setRange(0, tamanos.back());
+    customPlot->yAxis->setRange(0, *max_element(yPeor.constBegin(), yPeor.constEnd()) + 100);
 
-    // Ajustar los rangos
-    customPlot->xAxis->setRange(0, sizes.back());
-    customPlot->yAxis->setRange(0, *ranges::max_element(yWorst) + 100);  // Ajustar el rango del eje Y
-
-    // Aplicar escala logarítmica al eje Y
-    customPlot->yAxis->setScaleType(QCPAxis::stLogarithmic);
-
-    // Mostrar leyenda
     customPlot->legend->setVisible(true);
-
-    // Reploteo final
     customPlot->replot();
 }
 
-// Función para graficar el comportamiento teórico
-void plotTheoretical(QCustomPlot* customPlot, const vector<int>& sizes) {
-    QVector<double> x(sizes.size()), yBest(sizes.size()), yWorst(sizes.size()), yAvg(sizes.size());
+// Graficar el comportamiento teórico
+void graficarTeorico(QCustomPlot* customPlot, const vector<int>& tamanos) {
+    QVector<double> x(tamanos.size()), yMejor(tamanos.size()), yPeor(tamanos.size()), yPromedio(tamanos.size());
 
-    // Llenar los datos con la complejidad teórica
-    for (size_t i = 0; i < sizes.size(); ++i) {
-        x[i] = sizes[i];
-        yBest[i] = log2(sizes[i]+100);// se suma 100 para que aparezca en la escala del eje y      // O(log n)
-        yWorst[i] = sizes[i];          // O(n)
-        yAvg[i] = log2(sizes[i]);      // O(log n) caso promedio
+    for (size_t i = 0; i < tamanos.size(); ++i) {
+        x[i] = tamanos[i];
+        yMejor[i] = log2(tamanos[i] + 100); // O(log n)
+        yPeor[i] = tamanos[i];              // O(n)
+        yPromedio[i] = log2(tamanos[i]);    // O(log n)
     }
 
-    // Graficar mejor caso
     customPlot->addGraph();
-    customPlot->graph(0)->setData(x, yBest);
+    customPlot->graph(0)->setData(x, yMejor);
     customPlot->graph(0)->setPen(QPen(Qt::blue, 2));
-    customPlot->graph(0)->setName("Mejor Caso (Teórico) O(logn)");
+    customPlot->graph(0)->setName("Mejor Caso (Teórico)");
 
-    // Graficar peor caso
     customPlot->addGraph();
-    customPlot->graph(1)->setData(x, yWorst);
+    customPlot->graph(1)->setData(x, yPeor);
     customPlot->graph(1)->setPen(QPen(Qt::red, 2));
-    customPlot->graph(1)->setName("Peor Caso (Teórico) O(n)");
+    customPlot->graph(1)->setName("Peor Caso (Teórico)");
 
-    // Graficar caso promedio
     customPlot->addGraph();
-    customPlot->graph(2)->setData(x, yAvg);
+    customPlot->graph(2)->setData(x, yPromedio);
     customPlot->graph(2)->setPen(QPen(Qt::green, 2));
-    customPlot->graph(2)->setName("Caso Promedio (Teórico) O(logn)");
+    customPlot->graph(2)->setName("Caso Promedio (Teórico)");
 
-    // Ajustar etiquetas y rango de ejes
-    customPlot->xAxis->setLabel("Tamaño de entrada (n)");
+    customPlot->xAxis->setLabel("Tamaño de entrada");
     customPlot->yAxis->setLabel("Operaciones");
 
-    // Ajustar los rangos
-    customPlot->xAxis->setRange(0, sizes.back());
-    customPlot->yAxis->setRange(0, sizes.back());  // Ajustar el rango del eje Y
+    customPlot->xAxis->setRange(0, tamanos.back());
+    customPlot->yAxis->setRange(0, tamanos.back());
 
-    // Aplicar escala logarítmica al eje Y
-    customPlot->yAxis->setScaleType(QCPAxis::stLogarithmic);
-
-    // Mostrar leyenda
     customPlot->legend->setVisible(true);
-
-    // Reploteo final
     customPlot->replot();
 }
 
 int main(int argc, char *argv[]) {
-    // Realizar los benchmarks
-    vector<int> sizes = {100, 1000, 5000, 10000, 50000}; // Tamaños de entrada
-    vector<long long> bestCaseTimes, worstCaseTimes, avgCaseTimes;
+    vector<int> tamanos = {100, 1000, 5000, 10000, 50000};
+    vector<long long> tiemposMejorCaso, tiemposPeorCaso, tiemposPromedio;
 
-    runBenchmarks(sizes, bestCaseTimes, worstCaseTimes, avgCaseTimes);
+    ejecutarBenchmarks(tamanos, tiemposMejorCaso, tiemposPeorCaso, tiemposPromedio);
 
-    // Crear la gráfica de los resultados
-    QApplication a(argc, argv);
+    QApplication app(argc, argv);
     QCustomPlot customPlot1;
     customPlot1.legend->setVisible(true);
-    plotResults(&customPlot1, sizes, bestCaseTimes, worstCaseTimes, avgCaseTimes);
+    graficarResultados(&customPlot1, tamanos, tiemposMejorCaso, tiemposPeorCaso, tiemposPromedio);
     customPlot1.resize(800, 600);
     customPlot1.show();
 
-    // Crear la gráfica del comportamiento teórico
     QCustomPlot customPlot2;
     customPlot2.legend->setVisible(true);
-    plotTheoretical(&customPlot2, sizes);
+    graficarTeorico(&customPlot2, tamanos);
     customPlot2.resize(800, 600);
     customPlot2.show();
 
-    return a.exec();
+    return app.exec();
 }
+
