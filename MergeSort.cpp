@@ -11,230 +11,213 @@
 using namespace std;
 using namespace std::chrono;
 
-//Medicion del tiempo
-long long getSystemTimeNano() {
+// Función para obtener el tiempo en nanosegundos
+long long obtenerTiempoEnNanoSegundos() {
     return duration_cast<nanoseconds>(high_resolution_clock::now().time_since_epoch()).count();
 }
 
-// Algoritmo Merge Sort
-void merge(vector<int>& arr, int left, int mid, int right) {
-    int n1 = mid - left + 1;
-    int n2 = right - mid;
+// Función de mezcla para Merge Sort
+void mezclarVectores(vector<int>& arr, int izq, int medio, int der) {
+    int tamIzq = medio - izq + 1;
+    int tamDer = der - medio;
 
-    vector<int> L(n1);
-    vector<int> R(n2);
+    vector<int> subIzq(tamIzq);
+    vector<int> subDer(tamDer);
 
-    for (int i = 0; i < n1; i++)
-        L[i] = arr[left + i];
-    for (int j = 0; j < n2; j++)
-        R[j] = arr[mid + 1 + j];
+    for (int i = 0; i < tamIzq; i++)
+        subIzq[i] = arr[izq + i];
+    for (int j = 0; j < tamDer; j++)
+        subDer[j] = arr[medio + 1 + j];
 
-    int i = 0, j = 0;
-    int k = left;
-    while (i < n1 && j < n2) {
-        if (L[i] <= R[j]) {
-            arr[k] = L[i];
+    int i = 0, j = 0, k = izq;
+    while (i < tamIzq && j < tamDer) {
+        if (subIzq[i] <= subDer[j]) {
+            arr[k] = subIzq[i];
             i++;
         } else {
-            arr[k] = R[j];
+            arr[k] = subDer[j];
             j++;
         }
         k++;
     }
 
-    while (i < n1) {
-        arr[k] = L[i];
+    while (i < tamIzq) {
+        arr[k] = subIzq[i];
         i++;
         k++;
     }
 
-    while (j < n2) {
-        arr[k] = R[j];
+    while (j < tamDer) {
+        arr[k] = subDer[j];
         j++;
         k++;
     }
 }
 
-void mergeSort(vector<int>& arr, int left, int right) {
-    if (left < right) {
-        int mid = left + (right - left) / 2;
+// Implementación de Merge Sort
+void ordenarPorMezcla(vector<int>& arr, int izq, int der) {
+    if (izq < der) {
+        int medio = izq + (der - izq) / 2;
 
-        mergeSort(arr, left, mid);
-        mergeSort(arr, mid + 1, right);
+        ordenarPorMezcla(arr, izq, medio);
+        ordenarPorMezcla(arr, medio + 1, der);
 
-        merge(arr, left, mid, right);
+        mezclarVectores(arr, izq, medio, der);
     }
 }
 
-// Genera un array de tamaño n en el mejor caso (ya ordenado)
-vector<int> generateBestCase(int n) {
-    vector<int> arr(n);
+// Genera un array en el mejor caso (ordenado)
+vector<int> generarMejorCaso(int n) {
+    vector<int> arreglo(n);
     for (int i = 0; i < n; i++) {
-        arr[i] = i;
+        arreglo[i] = i;
     }
-    return arr;
+    return arreglo;
 }
 
-//Peor caso (orden inverso)
-vector<int> generateWorstCase(int n) {
-    vector<int> arr(n);
+// Genera un array en el peor caso (orden inverso)
+vector<int> generarPeorCaso(int n) {
+    vector<int> arreglo(n);
     for (int i = 0; i < n; i++) {
-        arr[i] = n - i;
+        arreglo[i] = n - i;
     }
-    return arr;
+    return arreglo;
 }
 
-//Caso promedio (aleatorio)
-vector<int> generateAverageCase(int n) {
-    vector<int> arr(n);
+// Genera un array en un caso promedio (aleatorio)
+vector<int> generarCasoPromedio(int n) {
+    vector<int> arreglo(n);
     for (int i = 0; i < n; i++) {
-        arr[i] = i;
+        arreglo[i] = i;
     }
     random_device rd;
     mt19937 g(rd());
-    shuffle(arr.begin(), arr.end(), g);
-    return arr;
+    shuffle(arreglo.begin(), arreglo.end(), g);
+    return arreglo;
 }
 
-// Función para realizar los benchmarks y devolver los resultados
-void runBenchmarks(const vector<int>& sizes, vector<long long>& bestCaseTimes, vector<long long>& worstCaseTimes, vector<long long>& avgCaseTimes) {
-    for (int n : sizes) {
+// Realiza los benchmarks y almacena los resultados
+void ejecutarBenchmarks(const vector<int>& tamanos, vector<long long>& tiemposMejorCaso, vector<long long>& tiemposPeorCaso, vector<long long>& tiemposCasoPromedio) {
+    for (int n : tamanos) {
         // Mejor caso
-        vector<int> bestCase = generateBestCase(n);
-        long long start = getSystemTimeNano();
-        mergeSort(bestCase, 0, n - 1);
-        long long end = getSystemTimeNano();
-        bestCaseTimes.push_back(end - start);
+        vector<int> mejorCaso = generarMejorCaso(n);
+        long long inicio = obtenerTiempoEnNanoSegundos();
+        ordenarPorMezcla(mejorCaso, 0, n - 1);
+        long long fin = obtenerTiempoEnNanoSegundos();
+        tiemposMejorCaso.push_back(fin - inicio);
 
         // Peor caso
-        vector<int> worstCase = generateWorstCase(n);
-        start = getSystemTimeNano();
-        mergeSort(worstCase, 0, n - 1);
-        end = getSystemTimeNano();
-        worstCaseTimes.push_back(end - start);
+        vector<int> peorCaso = generarPeorCaso(n);
+        inicio = obtenerTiempoEnNanoSegundos();
+        ordenarPorMezcla(peorCaso, 0, n - 1);
+        fin = obtenerTiempoEnNanoSegundos();
+        tiemposPeorCaso.push_back(fin - inicio);
 
         // Caso promedio
-        vector<int> averageCase = generateAverageCase(n);
-        start = getSystemTimeNano();
-        mergeSort(averageCase, 0, n - 1);
-        end = getSystemTimeNano();
-        avgCaseTimes.push_back(end - start);
+        vector<int> casoPromedio = generarCasoPromedio(n);
+        inicio = obtenerTiempoEnNanoSegundos();
+        ordenarPorMezcla(casoPromedio, 0, n - 1);
+        fin = obtenerTiempoEnNanoSegundos();
+        tiemposCasoPromedio.push_back(fin - inicio);
     }
 }
 
-// Función para graficar los resultados del benchmark
-void plotResults(QCustomPlot* customPlot, const vector<int>& sizes, const vector<long long>& bestCaseTimes, const vector<long long>& worstCaseTimes, const vector<long long>& avgCaseTimes) {
-    QVector<double> x(sizes.size()), yBest(sizes.size()), yWorst(sizes.size()), yAvg(sizes.size());
+// Función para graficar resultados de benchmarks
+void graficarResultados(QCustomPlot* grafico, const vector<int>& tamanos, const vector<long long>& tiemposMejor, const vector<long long>& tiemposPeor, const vector<long long>& tiemposPromedio) {
+    QVector<double> x(tamanos.size()), yMejor(tamanos.size()), yPeor(tamanos.size()), yPromedio(tamanos.size());
 
-    // Llenar los datos
-    for (size_t i = 0; i < sizes.size(); ++i) {
-        x[i] = sizes[i];
-        yBest[i] = bestCaseTimes[i]; 
-        yWorst[i] = worstCaseTimes[i];
-        yAvg[i] = avgCaseTimes[i];
+    for (size_t i = 0; i < tamanos.size(); ++i) {
+        x[i] = tamanos[i];
+        yMejor[i] = tiemposMejor[i];
+        yPeor[i] = tiemposPeor[i];
+        yPromedio[i] = tiemposPromedio[i];
     }
 
     // Graficar mejor caso
-    customPlot->addGraph();
-    customPlot->graph(0)->setData(x, yBest);
-    customPlot->graph(0)->setPen(QPen(Qt::blue));
-    customPlot->graph(0)->setName("Mejor Caso O(nlogn)");
+    grafico->addGraph();
+    grafico->graph(0)->setData(x, yMejor);
+    grafico->graph(0)->setPen(QPen(Qt::blue));
+    grafico->graph(0)->setName("Mejor Caso O(nlogn)");
 
     // Graficar peor caso
-    customPlot->addGraph();
-    customPlot->graph(1)->setData(x, yWorst);
-    customPlot->graph(1)->setPen(QPen(Qt::red));
-    customPlot->graph(1)->setName("Peor Caso O(nlogn)");
+    grafico->addGraph();
+    grafico->graph(1)->setData(x, yPeor);
+    grafico->graph(1)->setPen(QPen(Qt::red));
+    grafico->graph(1)->setName("Peor Caso O(nlogn)");
 
     // Graficar caso promedio
-    customPlot->addGraph();
-    customPlot->graph(2)->setData(x, yAvg);
-    customPlot->graph(2)->setPen(QPen(Qt::green));
-    customPlot->graph(2)->setName("Caso Promedio O(nlogn)");
+    grafico->addGraph();
+    grafico->graph(2)->setData(x, yPromedio);
+    grafico->graph(2)->setPen(QPen(Qt::green));
+    grafico->graph(2)->setName("Caso Promedio O(nlogn)");
 
     // Ajustar etiquetas y rango de ejes
-    customPlot->xAxis->setLabel("Tamaño de entrada (n)");
-    customPlot->yAxis->setLabel("Tiempo (nanosegundos)");
+    grafico->xAxis->setLabel("Tamaño de entrada (n)");
+    grafico->yAxis->setLabel("Tiempo (nanosegundos)");
 
-    // Ajustar los rangos
-    customPlot->xAxis->setRange(0, sizes.back());
-    customPlot->yAxis->setRange(0, *max_element(yWorst.begin(), yWorst.end()) + 100);  // Ajustar el rango del eje Y
+    grafico->xAxis->setRange(0, tamanos.back());
+    grafico->yAxis->setRange(0, *max_element(yPeor.begin(), yPeor.end()) + 100);
 
-    // Mostrar leyenda
-    customPlot->legend->setVisible(true);
-
-    // Reploteo final
-    customPlot->replot();
+    // Mostrar leyenda y replotear
+    grafico->legend->setVisible(true);
+    grafico->replot();
 }
 
-// Función para graficar el comportamiento teórico
-void plotTheoretical(QCustomPlot* customPlot, const vector<int>& sizes) {
-    QVector<double> x(sizes.size()), yBest(sizes.size()), yWorst(sizes.size()), yAvg(sizes.size());
+// Función para graficar la complejidad teórica
+void graficarTeoria(QCustomPlot* grafico, const vector<int>& tamanos) {
+    QVector<double> x(tamanos.size()), yTeoricoMejor(tamanos.size()), yTeoricoPeor(tamanos.size()), yTeoricoPromedio(tamanos.size());
 
-    // Llenar los datos con la complejidad teórica
-    for (size_t i = 0; i < sizes.size(); ++i) {
-        x[i] = sizes[i];
-        yBest[i] = pow(sizes[i], 2); // O(n log n) para mejor caso en Merge Sort
-        yWorst[i] = pow(sizes[i], 2); // O(n log n) para peor caso en Merge Sort
-        yAvg[i] = pow(sizes[i], 2);   // O(n log n) caso promedio en Merge Sort
+    for (size_t i = 0; i < tamanos.size(); ++i) {
+        x[i] = tamanos[i];
+        yTeoricoMejor[i] = pow(tamanos[i], 2); 
+        yTeoricoPeor[i] = pow(tamanos[i], 2); 
+        yTeoricoPromedio[i] = pow(tamanos[i], 2);   
     }
 
-    // Graficar mejor caso
-    customPlot->addGraph();
-    customPlot->graph(0)->setData(x, yBest);
-    customPlot->graph(0)->setPen(QPen(Qt::blue, 2));
-    customPlot->graph(0)->setName("Mejor Caso (Teórico) O(nlogn)");
+    grafico->addGraph();
+    grafico->graph(0)->setData(x, yTeoricoMejor);
+    grafico->graph(0)->setPen(QPen(Qt::blue, 2));
+    grafico->graph(0)->setName("Mejor Caso (Teórico) O(nlogn)");
 
-    // Graficar peor caso
-    customPlot->addGraph();
-    customPlot->graph(1)->setData(x, yWorst);
-    customPlot->graph(1)->setPen(QPen(Qt::red, 2));
-    customPlot->graph(1)->setName("Peor Caso (Teórico) O(nlogn)");
+    grafico->addGraph();
+    grafico->graph(1)->setData(x, yTeoricoPeor);
+    grafico->graph(1)->setPen(QPen(Qt::red, 2));
+    grafico->graph(1)->setName("Peor Caso (Teórico) O(nlogn)");
 
-    // Graficar caso promedio
-    customPlot->addGraph();
-    customPlot->graph(2)->setData(x, yAvg);
-    customPlot->graph(2)->setPen(QPen(Qt::green, 2));
-    customPlot->graph(2)->setName("Caso Promedio (Teórico) O(nlogn)");
+    grafico->addGraph();
+    grafico->graph(2)->setData(x, yTeoricoPromedio);
+    grafico->graph(2)->setPen(QPen(Qt::green, 2));
+    grafico->graph(2)->setName("Caso Promedio (Teórico) O(nlogn)");
 
-    // Ajustar etiquetas y rango de ejes
-    customPlot->xAxis->setLabel("Tamaño de entrada (n)");
-    customPlot->yAxis->setLabel("Operaciones");
+    grafico->xAxis->setLabel("Tamaño de entrada (n)");
+    grafico->yAxis->setLabel("Operaciones");
 
-    // Ajustar los rangos
-    customPlot->xAxis->setRange(0, sizes.back());
-    customPlot->yAxis->setRange(0, pow(sizes.back(), 2));  // Ajustar el rango del eje Y
+    grafico->xAxis->setRange(0, tamanos.back());
+    grafico->yAxis->setRange(0, pow(tamanos.back(), 2));
 
-    // Mostrar leyenda
-    customPlot->legend->setVisible(true);
-
-    // Reploteo final
-    customPlot->replot();
+    grafico->legend->setVisible(true);
+    grafico->replot();
 }
 
 int main(int argc, char *argv[]) {
-    // Realizar los benchmarks
-    vector<int> sizes = {100, 1000, 5000, 10000, 50000}; // Tamaños de entrada
-    vector<long long> bestCaseTimes, worstCaseTimes, avgCaseTimes;
+    vector<int> tamanos = {100, 1000, 5000, 10000, 50000}; 
+    vector<long long> tiemposMejor, tiemposPeor, tiemposPromedio;
 
-    runBenchmarks(sizes, bestCaseTimes, worstCaseTimes, avgCaseTimes);
+    ejecutarBenchmarks(tamanos, tiemposMejor, tiemposPeor, tiemposPromedio);
 
-    //Crear la gráfica
-    QApplication a(argc, argv);
+    QApplication app(argc, argv);
 
-    //Gráfica de resultados del benchmark
-    QCustomPlot customPlot1;
-    customPlot1.legend->setVisible(true);
-    plotResults(&customPlot1, sizes, bestCaseTimes, worstCaseTimes, avgCaseTimes);
-    customPlot1.resize(800, 600);
-    customPlot1.show();
+    QCustomPlot graficoResultados;
+    graficoResultados.legend->setVisible(true);
+    graficarResultados(&graficoResultados, tamanos, tiemposMejor, tiemposPeor, tiemposPromedio);
+    graficoResultados.resize(800, 600);
+    graficoResultados.show();
 
-    //Gráfica de comportamiento teórico
-    QCustomPlot customPlot2;
-    customPlot2.legend->setVisible(true);
-    plotTheoretical(&customPlot2, sizes);
-    customPlot2.resize(800, 600);
-    customPlot2.show();
+    QCustomPlot graficoTeorico;
+    graficarTeoria(&graficoTeorico, tamanos);
+    graficoTeorico.resize(800, 600);
+    graficoTeorico.show();
 
-    return a.exec();
+    return app.exec();
 }
+
