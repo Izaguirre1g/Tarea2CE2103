@@ -11,195 +11,197 @@
 using namespace std;
 using namespace std::chrono;
 
-// Función de medición de tiempo
-long long getSystemTimeNano() {
+// Función para obtener el tiempo actual en nanosegundos
+long long obtenerTiempoActualNano() {
     return duration_cast<nanoseconds>(high_resolution_clock::now().time_since_epoch()).count();
 }
 
-// Algoritmo BubbleSort
-void bubbleSort(vector<int>& arr) {
-    int n = arr.size();
-    for (int i = 0; i < n - 1; i++) {
-        bool swapped = false;
-        for (int j = 0; j < n - i - 1; j++) {
-            if (arr[j] > arr[j + 1]) {
-                swap(arr[j], arr[j + 1]);
-                swapped = true;
+// Implementación del algoritmo de ordenamiento Burbuja
+void ordenarBurbuja(vector<int>& datos) {
+    int longitud = datos.size();
+    for (int i = 0; i < longitud - 1; i++) {
+        bool huboIntercambio = false;
+        for (int j = 0; j < longitud - i - 1; j++) {
+            if (datos[j] > datos[j + 1]) {
+                swap(datos[j], datos[j + 1]);
+                huboIntercambio = true;
             }
         }
-        if (!swapped) break; // Si no hubo intercambio, el array ya está ordenado (mejor caso)
+        if (!huboIntercambio) break; // Si no se hicieron intercambios, los datos ya están ordenados
     }
 }
 
-// Mejor caso (ya ordenado)
-vector<int> generateBestCase(int n) {
-    vector<int> arr(n);
-    for (int i = 0; i < n; i++) {
-        arr[i] = i;
+// Generar datos en el mejor caso (ordenados)
+vector<int> generarMejorCaso(int tamano) {
+    vector<int> datos(tamano);
+    for (int i = 0; i < tamano; i++) {
+        datos[i] = i;
     }
-    return arr;
+    return datos;
 }
 
-// Peor caso (orden inverso)
-vector<int> generateWorstCase(int n) {
-    vector<int> arr(n);
-    for (int i = 0; i < n; i++) {
-        arr[i] = n - i;
+// Generar datos en el peor caso (orden inverso)
+vector<int> generarPeorCaso(int tamano) {
+    vector<int> datos(tamano);
+    for (int i = 0; i < tamano; i++) {
+        datos[i] = tamano - i;
     }
-    return arr;
+    return datos;
 }
 
-//Caso promedio (aleatorio)
-vector<int> generateAverageCase(int n) {
-    vector<int> arr(n);
-    for (int i = 0; i < n; i++) {
-        arr[i] = i;
+// Generar datos en un caso promedio (aleatorio)
+vector<int> generarCasoPromedio(int tamano) {
+    vector<int> datos(tamano);
+    for (int i = 0; i < tamano; i++) {
+        datos[i] = i;
     }
     random_device rd;
-    mt19937 g(rd());
-    shuffle(arr.begin(), arr.end(), g);
-    return arr;
+    mt19937 generador(rd());
+    shuffle(datos.begin(), datos.end(), generador);
+    return datos;
 }
 
-// Función para realizar los benchmarks y devolver los resultados
-void runBenchmarks(const vector<int>& sizes, vector<long long>& bestCaseTimes, vector<long long>& worstCaseTimes, vector<long long>& avgCaseTimes) {
-    for (int n : sizes) {
+// Ejecutar las pruebas de rendimiento (benchmarks) para los diferentes casos
+void ejecutarPruebas(const vector<int>& tamanos, vector<long long>& tiemposMejorCaso, vector<long long>& tiemposPeorCaso, vector<long long>& tiemposPromedio) {
+    for (int tamano : tamanos) {
         // Mejor caso
-        vector<int> bestCase = generateBestCase(n);
-        long long start = getSystemTimeNano();
-        bubbleSort(bestCase);
-        long long end = getSystemTimeNano();
-        bestCaseTimes.push_back(end - start);
+        vector<int> mejorCaso = generarMejorCaso(tamano);
+        long long inicio = obtenerTiempoActualNano();
+        ordenarBurbuja(mejorCaso);
+        long long fin = obtenerTiempoActualNano();
+        tiemposMejorCaso.push_back(fin - inicio);
 
         // Peor caso
-        vector<int> worstCase = generateWorstCase(n);
-        start = getSystemTimeNano();
-        bubbleSort(worstCase);
-        end = getSystemTimeNano();
-        worstCaseTimes.push_back(end - start);
+        vector<int> peorCaso = generarPeorCaso(tamano);
+        inicio = obtenerTiempoActualNano();
+        ordenarBurbuja(peorCaso);
+        fin = obtenerTiempoActualNano();
+        tiemposPeorCaso.push_back(fin - inicio);
 
         // Caso promedio
-        vector<int> averageCase = generateAverageCase(n);
-        start = getSystemTimeNano();
-        bubbleSort(averageCase);
-        end = getSystemTimeNano();
-        avgCaseTimes.push_back(end - start);
+        vector<int> casoPromedio = generarCasoPromedio(tamano);
+        inicio = obtenerTiempoActualNano();
+        ordenarBurbuja(casoPromedio);
+        fin = obtenerTiempoActualNano();
+        tiemposPromedio.push_back(fin - inicio);
     }
 }
 
-// Función para graficar los resultados del benchmark
-void plotResults(QCustomPlot* customPlot, const vector<int>& sizes, const vector<long long>& bestCaseTimes, const vector<long long>& worstCaseTimes, const vector<long long>& avgCaseTimes) {
-    QVector<double> x(sizes.size()), yBest(sizes.size()), yWorst(sizes.size()), yAvg(sizes.size());
+// Función para graficar los resultados de las pruebas
+void graficarResultados(QCustomPlot* customPlot, const vector<int>& tamanos, const vector<long long>& tiemposMejorCaso, const vector<long long>& tiemposPeorCaso, const vector<long long>& tiemposPromedio) {
+    QVector<double> ejeX(tamanos.size()), tiemposMejor(tamanos.size()), tiemposPeor(tamanos.size()), tiemposProm(tamanos.size());
 
-    // Llenar los datos
-    for (size_t i = 0; i < sizes.size(); ++i) {
-        x[i] = sizes[i];
-        yBest[i] = bestCaseTimes[i] + 10000000; // Añadir valor constante para elevar la línea
-        yWorst[i] = worstCaseTimes[i];
-        yAvg[i] = avgCaseTimes[i];
+    // Cargar los datos
+    for (size_t i = 0; i < tamanos.size(); ++i) {
+        ejeX[i] = tamanos[i];
+        tiemposMejor[i] = tiemposMejorCaso[i] + 10000000; // Ajuste para elevar la línea
+        tiemposPeor[i] = tiemposPeorCaso[i];
+        tiemposProm[i] = tiemposPromedio[i];
     }
 
     // Graficar mejor caso
     customPlot->addGraph();
-    customPlot->graph(0)->setData(x, yBest);
+    customPlot->graph(0)->setData(ejeX, tiemposMejor);
     customPlot->graph(0)->setPen(QPen(Qt::blue));
     customPlot->graph(0)->setName("Mejor Caso O(n)");
 
     // Graficar peor caso
     customPlot->addGraph();
-    customPlot->graph(1)->setData(x, yWorst);
+    customPlot->graph(1)->setData(ejeX, tiemposPeor);
     customPlot->graph(1)->setPen(QPen(Qt::red));
     customPlot->graph(1)->setName("Peor Caso O(n^2)");
 
     // Graficar caso promedio
     customPlot->addGraph();
-    customPlot->graph(2)->setData(x, yAvg);
+    customPlot->graph(2)->setData(ejeX, tiemposProm);
     customPlot->graph(2)->setPen(QPen(Qt::green));
     customPlot->graph(2)->setName("Caso Promedio O(n^2)");
 
-    // Ajustar etiquetas y rango de ejes
+    // Etiquetas de los ejes
     customPlot->xAxis->setLabel("Tamaño de entrada (n)");
     customPlot->yAxis->setLabel("Tiempo (nanosegundos)");
 
-    // Ajustar los rangos
-    customPlot->xAxis->setRange(0, sizes.back());
-    customPlot->yAxis->setRange(0, *max_element(yWorst.begin(), yWorst.end()) + 100);  // Ajustar el rango del eje Y
+    // Ajustar rangos de los ejes
+    customPlot->xAxis->setRange(0, tamanos.back());
+    customPlot->yAxis->setRange(0, *max_element(tiemposPeor.begin(), tiemposPeor.end()) + 100);  // Ajuste del eje Y
 
     // Mostrar leyenda
     customPlot->legend->setVisible(true);
 
-    // Reploteo final
+    // Redibujar la gráfica
     customPlot->replot();
 }
 
-// Función para graficar el comportamiento teórico
-void plotTheoretical(QCustomPlot* customPlot, const vector<int>& sizes) {
-    QVector<double> x(sizes.size()), yBest(sizes.size()), yWorst(sizes.size()), yAvg(sizes.size());
+// Graficar el comportamiento teórico de la complejidad temporal
+void graficarComportamientoTeorico(QCustomPlot* customPlot, const vector<int>& tamanos) {
+    QVector<double> ejeX(tamanos.size()), teoricoMejor(tamanos.size()), teoricoPeor(tamanos.size()), teoricoProm(tamanos.size());
 
-    // Llenar los datos con la complejidad teórica
-    for (size_t i = 0; i < sizes.size(); ++i) {
-        x[i] = sizes[i];
-        yBest[i] = sizes[i];         // O(n)
-        yWorst[i] = pow(sizes[i], 2); // O(n^2)
-        yAvg[i] = pow(sizes[i], 2);   // O(n^2) caso promedio
+    // Cargar los datos con la complejidad teórica
+    for (size_t i = 0; i < tamanos.size(); ++i) {
+        ejeX[i] = tamanos[i];
+        teoricoMejor[i] = tamanos[i];         // O(n)
+        teoricoPeor[i] = pow(tamanos[i], 2);  // O(n^2)
+        teoricoProm[i] = pow(tamanos[i], 2);  // O(n^2) en promedio
     }
 
     // Graficar mejor caso
     customPlot->addGraph();
-    customPlot->graph(0)->setData(x, yBest);
+    customPlot->graph(0)->setData(ejeX, teoricoMejor);
     customPlot->graph(0)->setPen(QPen(Qt::blue, 2));
     customPlot->graph(0)->setName("Mejor Caso (Teórico) O(n)");
 
     // Graficar peor caso
     customPlot->addGraph();
-    customPlot->graph(1)->setData(x, yWorst);
+    customPlot->graph(1)->setData(ejeX, teoricoPeor);
     customPlot->graph(1)->setPen(QPen(Qt::red, 2));
     customPlot->graph(1)->setName("Peor Caso (Teórico) O(n^2)");
 
     // Graficar caso promedio
     customPlot->addGraph();
-    customPlot->graph(2)->setData(x, yAvg);
+    customPlot->graph(2)->setData(ejeX, teoricoProm);
     customPlot->graph(2)->setPen(QPen(Qt::green, 2));
     customPlot->graph(2)->setName("Caso Promedio (Teórico) O(n^2)");
 
-    // Ajustar etiquetas y rango de ejes
+    // Etiquetas de los ejes
     customPlot->xAxis->setLabel("Tamaño de entrada (n)");
     customPlot->yAxis->setLabel("Operaciones");
 
-    // Ajustar los rangos
-    customPlot->xAxis->setRange(0, sizes.back());
-    customPlot->yAxis->setRange(0, pow(sizes.back(), 2));  // Ajustar el rango del eje Y
+    // Ajustar rangos de los ejes
+    customPlot->xAxis->setRange(0, tamanos.back());
+    customPlot->yAxis->setRange(0, pow(tamanos.back(), 2));  // Ajuste del eje Y
 
     // Mostrar leyenda
     customPlot->legend->setVisible(true);
 
-    // Reploteo final
+    // Redibujar la gráfica
     customPlot->replot();
 }
 
 int main(int argc, char *argv[]) {
-    // Realizar los benchmarks
-    vector<int> sizes = {100, 1000, 5000, 10000, 50000}; // Tamaños de entrada
-    vector<long long> bestCaseTimes, worstCaseTimes, avgCaseTimes;
+    // Configurar los tamaños de las pruebas
+    vector<int> tamanos = {100, 1000, 5000, 10000, 50000};
+    vector<long long> tiemposMejorCaso, tiemposPeorCaso, tiemposPromedio;
 
-    runBenchmarks(sizes, bestCaseTimes, worstCaseTimes, avgCaseTimes);
+    // Ejecutar las pruebas de rendimiento
+    ejecutarPruebas(tamanos, tiemposMejorCaso, tiemposPeorCaso, tiemposPromedio);
 
-    // Crear la gráfica
-    QApplication a(argc, argv);
+    // Iniciar la aplicación gráfica
+    QApplication app(argc, argv);
 
-    // Gráfica de resultados del benchmark
-    QCustomPlot customPlot1;
-    customPlot1.legend->setVisible(true);
-    plotResults(&customPlot1, sizes, bestCaseTimes, worstCaseTimes, avgCaseTimes);
-    customPlot1.resize(800, 600);
-    customPlot1.show();
+    // Gráfica de resultados de las pruebas
+    QCustomPlot graficoResultados;
+    graficoResultados.legend->setVisible(true);
+    graficarResultados(&graficoResultados, tamanos, tiemposMejorCaso, tiemposPeorCaso, tiemposPromedio);
+    graficoResultados.resize(800, 600);
+    graficoResultados.show();
 
-    // Gráfica de comportamiento teórico
-    QCustomPlot customPlot2;
-    customPlot2.legend->setVisible(true);
-    plotTheoretical(&customPlot2, sizes);
-    customPlot2.resize(800, 600);
-    customPlot2.show();
+    // Gráfica del comportamiento teórico
+    QCustomPlot graficoTeorico;
+    graficoTeorico.legend->setVisible(true);
+    graficarComportamientoTeorico(&graficoTeorico, tamanos);
+    graficoTeorico.resize(800, 600);
+    graficoTeorico.show();
 
-    return a.exec();
+    return app.exec();
 }
+
